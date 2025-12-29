@@ -1,26 +1,187 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Afek Font */
+@font-face {
+  font-family: 'Afek';
+  src: url('/fonts/afek-ultralight-aaa.otf') format('opentype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Afek';
+  src: url('/fonts/afek-regular-aaa.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Afek';
+  src: url('/fonts/afek-bold-aaa.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Colors */
+  --color-primary: #142850;
+  --color-primary-light: #1a3a6e;
+  --color-action: #0090D5;
+  --color-action-hover: #007bb8;
+  --color-background: #F7F9FB;
+  --color-background-alt: #ffffff;
+  --color-text: #333333;
+  --color-text-light: #666666;
+  --color-text-muted: #888888;
+
+  /* Font family */
+  --font-family-afek: 'Afek', sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --background: #F7F9FB;
+  --foreground: #333333;
+}
+
+* {
+  box-sizing: border-box;
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><circle cx="8" cy="10" r="1" fill="black"/><circle cx="12" cy="10" r="1" fill="black"/><circle cx="16" cy="10" r="1" fill="black"/><circle cx="8" cy="14" r="1" fill="black"/><circle cx="12" cy="14" r="1" fill="black"/><circle cx="16" cy="14" r="1" fill="black"/><circle cx="8" cy="18" r="1" fill="black"/><circle cx="12" cy="18" r="1" fill="black"/><circle cx="16" cy="18" r="1" fill="black"/></svg>') 0 0, auto;
+}
+
+/* Dollar cursor on interactive elements */
+a,
+a *,
+button,
+button *,
+[role="button"],
+[role="button"] *,
+input[type="submit"],
+input[type="button"],
+.cursor-pointer,
+.cursor-pointer * {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>') 4 4, pointer !important;
+}
+
+/* Keep text cursor for inputs */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+textarea {
+  cursor: text;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+  font-family: 'Afek', sans-serif;
+}
+
+/* Font utilities */
+.font-afek {
+  font-family: 'Afek', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Afek', sans-serif;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #142850;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0090D5;
+}
+
+/* WhatsApp floating button animation */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.whatsapp-pulse {
+  animation: pulse 2s infinite;
+}
+
+/* Fade in animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* Arrow bounce animations for WhatsApp CTA */
+@keyframes bounceArrow {
+  0%, 100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(-8px);
+    opacity: 0.6;
+  }
+}
+
+@keyframes bounceArrowReverse {
+  0%, 100% {
+    transform: translateX(0) rotate(180deg);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(8px) rotate(180deg);
+    opacity: 0.6;
+  }
+}
+
+.animate-bounce-arrow {
+  animation: bounceArrow 1s ease-in-out infinite;
+}
+
+.animate-bounce-arrow-reverse {
+  animation: bounceArrowReverse 1s ease-in-out infinite;
+}
+
+/* Section padding */
+.section-padding {
+  padding: 80px 0;
+}
+
+@media (max-width: 768px) {
+  .section-padding {
+    padding: 50px 0;
+  }
 }
