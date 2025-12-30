@@ -24,10 +24,10 @@ export default function Header() {
             <Image
               src="/logo.svg"
               alt="Done1"
-              width={80}
-              height={36}
+              width={40}
+              height={18}
               priority
-              className="w-[80px] sm:w-[100px] h-auto"
+              className="w-[40px] h-auto"
             />
           </Link>
 
