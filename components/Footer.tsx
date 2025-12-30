@@ -32,7 +32,7 @@ export default function Footer() {
               <Image src="/logo.svg" alt="Done1" width={140} height={63} />
             </Link>
             <p className="text-white/70 mb-6 leading-relaxed">
-              משרד רואי חשבון מוביל המעניק מעטפת פיננסית מלאה לעסקים ולפרטיים.
+              משרד הנהלת חשבונות מוביל המעניק מעטפת פיננסית מלאה לעסקים ולפרטיים.
             </p>
             <a
               href="https://wa.me/972509700263"

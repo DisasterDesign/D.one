@@ -38,7 +38,7 @@ export default function Hero() {
             {/* Badge */}
             <div className="inline-flex items-center gap-2 bg-[#142850]/10 backdrop-blur-sm px-4 py-2 rounded-full mb-8 border border-[#142850]/20">
               <Calculator size={18} className="text-[#0090D5]" />
-              <span className="text-[#142850] text-sm font-medium">משרד רואי חשבון מוביל</span>
+              <span className="text-[#142850] text-sm font-medium">משרד הנהלת חשבונות מוביל</span>
             </div>
 
             {/* Main Heading - Blue text */}
@@ -49,7 +49,7 @@ export default function Hero() {
 
             {/* Subheading */}
             <p className="text-lg sm:text-xl md:text-2xl text-[#142850]/70 mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-              משרד רואי חשבון Done מעניק מעטפת פיננסית מלאה, כדי שאתה תוכל להתמקד בלהצמיח את העסק.
+              משרד הנהלת חשבונות Done מעניק מעטפת פיננסית מלאה, כדי שאתה תוכל להתמקד בלהצמיח את העסק.
             </p>
 
             {/* CTA Buttons */}
@@ -73,7 +73,7 @@ export default function Hero() {
             <div className="mt-12 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-[#142850]/60">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-[#0090D5] rounded-full" />
-                <span>חבר בלשכת רואי החשבון</span>
+                <span>מנהל חשבונות מוסמך</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-[#0090D5] rounded-full" />
