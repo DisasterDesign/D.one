@@ -16,7 +16,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 right-0 left-0 z-50 bg-[#142850] shadow-lg overflow-hidden">
+    <header className="fixed top-0 right-0 left-0 z-50 bg-[#142850] shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo - Right Side */}
@@ -24,10 +24,10 @@ export default function Header() {
             <Image
               src="/logo.svg"
               alt="Done1"
-              width={50}
-              height={23}
+              width={80}
+              height={36}
               priority
-              className="w-[50px] sm:w-[100px] h-auto max-w-[50px] sm:max-w-[100px]"
+              className="w-[80px] sm:w-[100px] h-auto"
             />
           </Link>
 
