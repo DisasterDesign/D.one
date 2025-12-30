@@ -16,7 +16,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 right-0 left-0 z-50 bg-[#142850] shadow-lg">
+    <header className="fixed top-0 right-0 left-0 z-50 bg-[#142850] shadow-lg overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo - Right Side */}
@@ -27,7 +27,7 @@ export default function Header() {
               width={120}
               height={54}
               priority
-              className="w-[90px] sm:w-[120px] h-auto"
+              className="w-[80px] sm:w-[120px] h-auto"
             />
           </Link>
 
