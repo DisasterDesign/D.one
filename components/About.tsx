@@ -34,9 +34,9 @@ export default function About() {
                 className="object-cover"
               />
             </div>
-            {/* Decorative Elements */}
-            <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-[#0090D5] rounded-2xl -z-10" />
-            <div className="absolute -top-6 -right-6 w-32 h-32 border-4 border-[#142850]/20 rounded-2xl -z-10" />
+            {/* Decorative Elements - hidden on mobile */}
+            <div className="hidden md:block absolute -bottom-6 -left-6 w-24 h-24 bg-[#0090D5] rounded-2xl -z-10" />
+            <div className="hidden md:block absolute -top-6 -right-6 w-32 h-32 border-4 border-[#142850]/20 rounded-2xl -z-10" />
           </div>
 
           {/* Content Side */}
