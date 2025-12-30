@@ -8,7 +8,7 @@ import Image from "next/image";
 const navItems = [
   { label: "אודות", href: "#about" },
   { label: "השירותים שלנו", href: "#services" },
-  { label: "החזרי מס", href: "#tax-refund" },
+  { label: "ליווי בנייה", href: "#construction" },
   { label: "צור קשר", href: "#contact" },
 ];
 
@@ -51,7 +51,7 @@ export default function Header() {
             rel="noopener noreferrer"
             className="hidden md:block bg-[#0090D5] hover:bg-[#007bb8] text-white px-5 py-2.5 rounded-full transition-colors font-medium"
           >
-            רוצה לחסוך?
+            בואו נדבר
           </a>
 
           {/* Mobile Menu Button */}
@@ -86,7 +86,7 @@ export default function Header() {
                 rel="noopener noreferrer"
                 className="block text-center bg-[#0090D5] text-white py-3 rounded-lg font-medium"
               >
-                רוצה לחסוך?
+                בואו נדבר
               </a>
             </div>
           </nav>

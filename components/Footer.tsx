@@ -5,17 +5,17 @@ import Image from "next/image";
 const quickLinks = [
   { label: "אודות", href: "#about" },
   { label: "השירותים שלנו", href: "#services" },
-  { label: "החזרי מס", href: "#tax-refund" },
+  { label: "ליווי בנייה", href: "#construction" },
   { label: "צור קשר", href: "#contact" },
 ];
 
 const services = [
+  "ליווי פרויקטי בנייה",
+  "ניהול יזום נדל\"ן",
+  "ביצוע בנייה",
   "הנהלת חשבונות",
   "ייעוץ מס",
-  "החזרי מס לשכירים",
-  "הצהרות הון",
-  "פתיחת עסק",
-  "משכורות ושכר",
+  "החזרי מס",
 ];
 
 export default function Footer() {
@@ -32,7 +32,7 @@ export default function Footer() {
               <Image src="/logo.svg" alt="Done1" width={140} height={63} />
             </Link>
             <p className="text-white/70 mb-6 leading-relaxed">
-              משרד הנהלת חשבונות מוביל המעניק מעטפת פיננסית מלאה לעסקים ולפרטיים.
+              מומחים בליווי פיננסי לחברות יזום, קבלנים וחברות בנייה.
             </p>
             <a
               href="https://wa.me/972509700263"

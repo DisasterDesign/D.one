@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { BadgeCheck, MessageCircle, ArrowLeft, Send } from "lucide-react";
+import { Building2, MessageCircle, ArrowLeft, Send } from "lucide-react";
 
 export default function TaxRefund() {
   const [customMessage, setCustomMessage] = useState("");
-  const defaultMessage = "היי דניאל, אני רוצה לבדוק זכאות להחזר מס";
+  const defaultMessage = "היי דניאל, אני מתעניין בליווי פיננסי לפרויקט בנייה";
 
   const openWhatsApp = (message: string) => {
     const encodedMessage = encodeURIComponent(message);
@@ -13,7 +13,7 @@ export default function TaxRefund() {
   };
 
   return (
-    <section id="tax-refund" className="section-padding bg-gradient-to-br from-[#0090D5] to-[#006d9e] relative overflow-hidden">
+    <section id="construction" className="section-padding bg-gradient-to-br from-[#0090D5] to-[#006d9e] relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-20">
         <div className="absolute -top-20 -right-20 w-96 h-96 bg-white rounded-full blur-3xl" />
@@ -25,29 +25,29 @@ export default function TaxRefund() {
           {/* Content */}
           <div className="text-white">
             <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
-              <BadgeCheck size={18} />
-              <span className="text-sm font-medium">החזרי מס לשכירים</span>
+              <Building2 size={18} />
+              <span className="text-sm font-medium">ליווי חברות יזום ובנייה</span>
             </div>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
-              שכיר?
-              <span className="block mt-2">מגיע לך כסף חזרה מהמדינה.</span>
+              פרויקט בנייה בדרך?
+              <span className="block mt-2">בוא נדבר על הליווי הפיננסי.</span>
             </h2>
 
             <p className="text-xl text-white/90 mb-8 leading-relaxed">
-              רוב השכירים בישראל לא יודעים שמגיע להם החזר מס.
-              אנחנו בודקים עבורך <strong>חינם</strong> אם מגיע לך כסף חזרה - עד 6 שנים אחורה!
+              ניהול פיננסי של פרויקט בנייה דורש מומחיות ייחודית.
+              אנחנו מלווים חברות יזום וקבלנים מהשלב הראשון ועד המסירה.
             </p>
 
             <ul className="space-y-4">
               {[
-                "בדיקת זכאות מהירה וללא התחייבות",
-                "טיפול מול רשויות המס מא' ועד ת'",
-                "עמלה רק במקרה של הצלחה",
+                "בקרת תקציב ותזרים לכל שלב בפרויקט",
+                "ניהול תשלומים לקבלני משנה וספקים",
+                "דיווח שוטף ושקיפות מלאה",
               ].map((item, index) => (
                 <li key={index} className="flex items-center gap-3">
                   <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
-                    <BadgeCheck size={16} />
+                    <Building2 size={16} />
                   </div>
                   <span className="text-white/90">{item}</span>
                 </li>
@@ -58,11 +58,11 @@ export default function TaxRefund() {
           {/* WhatsApp CTA */}
           <div className="bg-white rounded-3xl p-8 shadow-2xl">
             <h3 className="text-2xl font-bold text-[#142850] mb-2 text-center">
-              בדיקת זכאות חינם
+              שיחת ייעוץ ראשונית
             </h3>
             <p className="text-[#666666] mb-6 text-center text-lg">
-              עזוב אותך מיילים ופורמים - <br />
-              <span className="font-bold text-[#142850]">דבר איתנו ישירות בוואטסאפ!</span>
+              ספר לנו על הפרויקט שלך - <br />
+              <span className="font-bold text-[#142850]">ונבנה לך תוכנית ליווי מותאמת!</span>
             </p>
 
             {/* Main WhatsApp Button with Arrows */}
@@ -80,7 +80,7 @@ export default function TaxRefund() {
                 className="bg-[#0090D5] hover:bg-[#007bb8] text-white px-8 py-4 rounded-full font-bold text-lg flex items-center gap-3 transition-all hover:scale-105 shadow-lg hover:shadow-xl whatsapp-pulse"
               >
                 <MessageCircle size={24} />
-                <span>פתח וואטסאפ</span>
+                <span>בואו נדבר</span>
               </button>
 
               {/* Animated Arrows Left */}
@@ -103,7 +103,7 @@ export default function TaxRefund() {
               <textarea
                 value={customMessage}
                 onChange={(e) => setCustomMessage(e.target.value)}
-                placeholder="כתוב את ההודעה שלך כאן..."
+                placeholder="ספר לנו על הפרויקט שלך..."
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#0090D5] focus:ring-2 focus:ring-[#0090D5]/20 outline-none transition-all text-[#333333] resize-none h-24"
               />
 

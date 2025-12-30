@@ -1,4 +1,4 @@
-import { ArrowLeft, Calculator } from "lucide-react";
+import { ArrowLeft, Building2 } from "lucide-react";
 import Link from "next/link";
 import BankAnimation from "./BankAnimation";
 
@@ -37,28 +37,28 @@ export default function Hero() {
           <div className="text-center lg:text-right">
             {/* Badge */}
             <div className="inline-flex items-center gap-2 bg-[#142850]/10 backdrop-blur-sm px-4 py-2 rounded-full mb-8 border border-[#142850]/20">
-              <Calculator size={18} className="text-[#0090D5]" />
-              <span className="text-[#142850] text-sm font-medium">משרד הנהלת חשבונות מוביל</span>
+              <Building2 size={18} className="text-[#0090D5]" />
+              <span className="text-[#142850] text-sm font-medium">ליווי פיננסי לחברות בנייה ויזמות</span>
             </div>
 
             {/* Main Heading - Blue text */}
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#142850] mb-6 leading-tight">
               שקט נפשי
-              <span className="block text-[#0090D5]">לעסק שלך</span>
+              <span className="block text-[#0090D5]">לפרויקט שלך</span>
             </h1>
 
             {/* Subheading */}
             <p className="text-lg sm:text-xl md:text-2xl text-[#142850]/70 mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-              משרד הנהלת חשבונות Done מעניק מעטפת פיננסית מלאה, כדי שאתה תוכל להתמקד בלהצמיח את העסק.
+              Done1 מעניק ליווי פיננסי מלא לחברות יזום ובנייה, כדי שתוכל להתמקד בפרויקטים.
             </p>
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
               <Link
-                href="#tax-refund"
+                href="#construction"
                 className="group flex items-center gap-2 bg-[#142850] text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-[#0090D5] transition-all shadow-lg hover:shadow-xl"
               >
-                <span>לבדיקת זכאות להחזר מס</span>
+                <span>לשיחת ייעוץ ראשונית</span>
                 <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
               </Link>
               <Link
@@ -73,7 +73,7 @@ export default function Hero() {
             <div className="mt-12 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-[#142850]/60">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-[#0090D5] rounded-full" />
-                <span>מנהל חשבונות מוסמך</span>
+                <span>מומחה בליווי חברות בנייה</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-[#0090D5] rounded-full" />

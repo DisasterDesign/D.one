@@ -29,7 +29,7 @@ export default function About() {
             <div className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl">
               <Image
                 src="/danny.jpeg"
-                alt="דני - רואה חשבון"
+                alt="דני - מומחה ליווי פיננסי בנייה"
                 fill
                 className="object-cover"
               />
@@ -45,15 +45,15 @@ export default function About() {
               נעים להכיר
             </div>
             <h2 className="text-3xl sm:text-4xl font-bold text-[#142850] mb-6">
-              משרד Done<span className="text-[#0090D5]">1</span> - הבית הפיננסי שלך
+              Done<span className="text-[#0090D5]">1</span> - השותף הפיננסי לחברות בנייה
             </h2>
             <p className="text-lg text-[#666666] mb-6 leading-relaxed">
-              משרד Done הוקם במטרה לתת לעסקים בישראל בית פיננסים חכם ומתקדם.
-              אנחנו מאמינים שכל בעל עסק זכאי לשירות אישי, מקצועי וזמין.
+              Done1 הוקם במטרה לתת לחברות בנייה ויזמות ליווי פיננסי מקצועי ומתקדם.
+              אנחנו מאמינים שכל יזם וקבלן זכאי לשירות אישי, מקצועי וזמין.
             </p>
             <p className="text-lg text-[#666666] mb-8 leading-relaxed">
               הגישה שלנו פשוטה: אנחנו מטפלים בכל הנושאים הפיננסיים והבירוקרטיים,
-              כדי שאתם תוכלו להתמקד במה שאתם עושים הכי טוב - לנהל ולהצמיח את העסק.
+              כדי שתוכלו להתמקד בפרויקטים ולהצמיח את החברה.
             </p>
 
             {/* Features */}
