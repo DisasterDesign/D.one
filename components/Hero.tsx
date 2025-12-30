@@ -19,8 +19,8 @@ export default function Hero() {
         <div className="absolute bottom-[0%] right-[0%] w-[400px] h-[400px] bg-white rounded-full blur-[120px] opacity-50" />
       </div>
 
-      {/* Subtle decorative elements */}
-      <div className="absolute inset-0 overflow-hidden">
+      {/* Subtle decorative elements - hidden on mobile */}
+      <div className="absolute inset-0 overflow-hidden hidden md:block">
         {/* Circles on blue side */}
         <div className="absolute top-[15%] left-[10%] w-3 h-3 bg-white/20 rounded-full" />
         <div className="absolute top-[35%] left-[20%] w-2 h-2 bg-white/30 rounded-full" />
