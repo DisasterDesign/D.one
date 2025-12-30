@@ -74,7 +74,7 @@ export default function WhyUs() {
         {/* Stats */}
         <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 pt-12 border-t border-white/10">
           {[
-            { number: "10+", label: "שנות ניסיון" },
+            { number: "20+", label: "שנות ניסיון" },
             { number: "500+", label: "לקוחות מרוצים" },
             { number: "100%", label: "שביעות רצון" },
             { number: "24/7", label: "זמינות" },

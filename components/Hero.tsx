@@ -77,7 +77,7 @@ export default function Hero() {
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-[#0090D5] rounded-full" />
-                <span>+10 שנות ניסיון</span>
+                <span>+20 שנות ניסיון</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-[#0090D5] rounded-full" />

@@ -15,7 +15,7 @@ const services = [
   "ביצוע בנייה",
   "הנהלת חשבונות",
   "ייעוץ מס",
-  "החזרי מס",
+  "ליווי יזמי",
 ];
 
 export default function Footer() {
