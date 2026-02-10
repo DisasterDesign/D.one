@@ -127,6 +127,16 @@ export default function Footer() {
           <p className="text-white/50 text-sm text-center">
             © {currentYear} Done1. כל הזכויות שמורות.
           </p>
+          <p className="text-center mt-3">
+            <a
+              href="https://www.fuzionwebz.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white/30 hover:text-white/60 text-xs transition-opacity duration-300"
+            >
+              Built by Fuzion
+            </a>
+          </p>
         </div>
       </div>
     </footer>
