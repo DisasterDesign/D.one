@@ -47,14 +47,20 @@ export default function ResultsDashboard({ report, onReset }: Props) {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold text-[#142850]">דוח התאמה — {reportDate}</h2>
+        <h2 className="text-xl font-bold text-[#142850]">
+          דוח התאמה — {reportDate}
+        </h2>
         <div className="flex items-center gap-2">
           <button
             onClick={handleExport}
             disabled={exporting}
             className="flex items-center gap-2 px-4 py-2 bg-[#0090D5] hover:bg-[#007bb8] text-white rounded-lg text-sm font-medium transition-colors disabled:opacity-50"
           >
-            {exporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
+            {exporting ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Download className="w-4 h-4" />
+            )}
             ייצוא Excel
           </button>
           <button
@@ -67,7 +73,19 @@ export default function ResultsDashboard({ report, onReset }: Props) {
         </div>
       </div>
 
-      <SummaryCards summary={report.summary} integrityCheck={report.integrityCheck} />
+      <SummaryCards report={report} />
+
+      {/* Match type breakdown */}
+      <div className="flex items-center gap-4 text-sm text-[#666666] bg-gray-50 px-4 py-2 rounded-lg">
+        <span>
+          התאמה לפי מספר עבודה: <strong>{report.matchedByNumber}</strong>
+        </span>
+        <span>|</span>
+        <span>
+          התאמה לפי שם מטופל: <strong>{report.matchedByName}</strong>
+        </span>
+      </div>
+
       <MatchTable results={report.results} />
     </div>
   );

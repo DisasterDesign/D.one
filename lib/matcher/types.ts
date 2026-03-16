@@ -1,80 +1,53 @@
-export interface QuoteRecord {
-  workNumber: string;
-  clientName: string;
-  amount: number;
-  date: string;
-  rawRow: Record<string, unknown>;
-  rowIndex: number;
+export interface VeviRecord {
+  jobCode: number;
+  jobTags: string;
+  customer: string;
+  doctor: string;
+  patient: string;
+  acceptDate: string;
+  deliveryDate: string;
+  finishDate: string;
+  status: string;
 }
 
-export interface InvoiceRecord {
-  invoiceNumber: string;
-  workNumber: string;
-  clientName: string;
-  amount: number;
+export interface HashavshevetRecord {
+  headerNumber: number;
+  transactionType: string;
+  counterAccount: string;
   date: string;
+  valueDate: string;
+  reference: string;
   details: string;
-  rawRow: Record<string, unknown>;
-  rowIndex: number;
+  debitAmount: number | null;
+  creditAmount: number | null;
+  patientName: string;
+  jobNumbers: number[];
+  isInvoice: boolean;
 }
 
-export interface ColumnMapping {
-  shenhav: {
-    workNumber: string;
-    clientName: string;
-    amount: string;
-    date?: string;
-  };
-  hashavshevet: {
-    invoiceNumber: string;
-    workNumber: string;
-    clientName: string;
-    amount: string;
-    date?: string;
-  };
-}
-
-export type MatchStatus =
-  | 'MATCHED'
-  | 'MISSING_INVOICE'
-  | 'ORPHAN_INVOICE'
-  | 'AMOUNT_MISMATCH'
-  | 'DUPLICATE'
-  | 'PARSE_ERROR';
+export type MatchType = 'JOB_NUMBER' | 'EXACT_NAME' | 'NONE';
 
 export interface MatchResult {
-  status: MatchStatus;
-  quote?: QuoteRecord;
-  invoice?: InvoiceRecord;
-  amountDiff?: number;
-  amountDiffPercent?: number;
-  notes: string;
+  jobCode: number;
+  patient: string;
+  jobTags: string;
+  acceptDate: string;
+  deliveryDate: string;
+  status: string;
+  matchType: MatchType;
+  matchedInvoiceDetails: string;
+  matchedInvoiceAmount: number | null;
 }
 
 export interface MatchReport {
   timestamp: string;
-  summary: {
-    totalQuotes: number;
-    totalInvoices: number;
-    matched: number;
-    missingInvoice: number;
-    orphanInvoice: number;
-    amountMismatch: number;
-    duplicates: number;
-    parseErrors: number;
-  };
+  total: number;
+  matchedByNumber: number;
+  matchedByName: number;
+  totalMatched: number;
+  canceled: number;
+  missing: number;
+  matchedPercent: string;
+  missingPercent: string;
   results: MatchResult[];
-  integrityCheck: {
-    quotesAccountedFor: number;
-    invoicesAccountedFor: number;
-    isComplete: boolean;
-  };
-}
-
-export interface UploadedFile {
-  name: string;
-  headers: string[];
-  previewRows: Record<string, unknown>[];
-  rowCount: number;
-  rawData: ArrayBuffer;
 }

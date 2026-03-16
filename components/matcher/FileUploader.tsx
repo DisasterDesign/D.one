@@ -2,7 +2,14 @@
 
 import { useState, useRef, DragEvent, ChangeEvent } from 'react';
 import { Upload, FileSpreadsheet, X } from 'lucide-react';
-import type { UploadedFile } from '@/lib/matcher/types';
+
+interface UploadedFile {
+  name: string;
+  rawData: ArrayBuffer;
+  rowCount: number;
+  headers?: string[];
+  previewRows?: Record<string, unknown>[];
+}
 
 interface Props {
   label: string;
@@ -98,33 +105,35 @@ export default function FileUploader({ label, description, onFileLoaded, onClear
           </button>
         </div>
         <p className="text-sm text-[#333333] mb-2">{file.name}</p>
-        <p className="text-xs text-[#888888] mb-3">{file.rowCount} שורות · {file.headers.length} עמודות</p>
+        <p className="text-xs text-[#888888] mb-3">{file.rowCount} שורות{file.headers ? ` · ${file.headers.length} עמודות` : ''}</p>
 
         {/* Preview table */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-xs border-collapse">
-            <thead>
-              <tr>
-                {file.headers.map((h) => (
-                  <th key={h} className="bg-[#142850] text-white px-2 py-1 text-right whitespace-nowrap">
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {file.previewRows.map((row, i) => (
-                <tr key={i} className="border-b border-gray-200">
+        {file.headers && file.previewRows && (
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs border-collapse">
+              <thead>
+                <tr>
                   {file.headers.map((h) => (
-                    <td key={h} className="px-2 py-1 text-right whitespace-nowrap">
-                      {String(row[h] ?? '')}
-                    </td>
+                    <th key={h} className="bg-[#142850] text-white px-2 py-1 text-right whitespace-nowrap">
+                      {h}
+                    </th>
                   ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {file.previewRows.map((row, i) => (
+                  <tr key={i} className="border-b border-gray-200">
+                    {file.headers!.map((h) => (
+                      <td key={h} className="px-2 py-1 text-right whitespace-nowrap">
+                        {String(row[h] ?? '')}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     );
   }

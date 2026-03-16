@@ -3,35 +3,29 @@
 import { useState } from 'react';
 import { Search, Loader2 } from 'lucide-react';
 import FileUploader from '@/components/matcher/FileUploader';
-import ColumnMapper from '@/components/matcher/ColumnMapper';
 import ResultsDashboard from '@/components/matcher/ResultsDashboard';
-import type { UploadedFile, ColumnMapping, MatchReport } from '@/lib/matcher/types';
+import type { MatchReport } from '@/lib/matcher/types';
+
+interface UploadedFile {
+  name: string;
+  rawData: ArrayBuffer;
+  rowCount: number;
+}
 
 type Step = 'upload' | 'processing' | 'results';
 
 export default function MatcherPage() {
   const [step, setStep] = useState<Step>('upload');
-  const [shenhavFile, setShenhavFile] = useState<UploadedFile | null>(null);
+  const [veviFile, setVeviFile] = useState<UploadedFile | null>(null);
   const [hashavshevetFile, setHashavshevetFile] = useState<UploadedFile | null>(null);
-  const [shenhavMapping, setShenhavMapping] = useState<Record<string, string>>({});
-  const [hashavshevetMapping, setHashavshevetMapping] = useState<Record<string, string>>({});
   const [report, setReport] = useState<MatchReport | null>(null);
   const [error, setError] = useState('');
   const [processingStep, setProcessingStep] = useState('');
 
-  const canProcess =
-    shenhavFile &&
-    hashavshevetFile &&
-    shenhavMapping.workNumber &&
-    shenhavMapping.clientName &&
-    shenhavMapping.amount &&
-    hashavshevetMapping.invoiceNumber &&
-    hashavshevetMapping.workNumber &&
-    hashavshevetMapping.clientName &&
-    hashavshevetMapping.amount;
+  const canProcess = veviFile && hashavshevetFile;
 
   async function handleProcess() {
-    if (!shenhavFile || !hashavshevetFile) return;
+    if (!veviFile || !hashavshevetFile) return;
 
     setStep('processing');
     setError('');
@@ -39,26 +33,12 @@ export default function MatcherPage() {
 
     try {
       const formData = new FormData();
-      formData.append('shenhavFile', new Blob([shenhavFile.rawData]), shenhavFile.name);
-      formData.append('hashavshevetFile', new Blob([hashavshevetFile.rawData]), hashavshevetFile.name);
-
-      const mapping: ColumnMapping = {
-        shenhav: {
-          workNumber: shenhavMapping.workNumber,
-          clientName: shenhavMapping.clientName,
-          amount: shenhavMapping.amount,
-          date: shenhavMapping.date || undefined,
-        },
-        hashavshevet: {
-          invoiceNumber: hashavshevetMapping.invoiceNumber,
-          workNumber: hashavshevetMapping.workNumber,
-          clientName: hashavshevetMapping.clientName,
-          amount: hashavshevetMapping.amount,
-          date: hashavshevetMapping.date || undefined,
-        },
-      };
-
-      formData.append('columnMapping', JSON.stringify(mapping));
+      formData.append('veviFile', new Blob([veviFile.rawData]), veviFile.name);
+      formData.append(
+        'hashavshevetFile',
+        new Blob([hashavshevetFile.rawData]),
+        hashavshevetFile.name
+      );
 
       setProcessingStep('מעבד נתונים...');
 
@@ -83,10 +63,8 @@ export default function MatcherPage() {
 
   function handleReset() {
     setStep('upload');
-    setShenhavFile(null);
+    setVeviFile(null);
     setHashavshevetFile(null);
-    setShenhavMapping({});
-    setHashavshevetMapping({});
     setReport(null);
     setError('');
   }
@@ -109,8 +87,12 @@ export default function MatcherPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-[#142850] mb-2">התאמת הצעות מחיר מול חשבוניות</h2>
-        <p className="text-[#888888]">העלה קובץ Excel מ-שנהב + קובץ מחשבשבת</p>
+        <h2 className="text-2xl font-bold text-[#142850] mb-2">
+          התאמת עבודות מול חשבוניות
+        </h2>
+        <p className="text-[#888888]">
+          העלה קובץ Excel מ-Vevi (שנהב) + קובץ כרטסת מחשבשבת
+        </p>
       </div>
 
       {error && (
@@ -122,40 +104,20 @@ export default function MatcherPage() {
       {/* File Uploaders */}
       <div className="grid md:grid-cols-2 gap-4">
         <FileUploader
-          label="קובץ שנהב"
-          description="הצעות מחיר מ-Vevi Dental"
-          onFileLoaded={setShenhavFile}
-          onClear={() => { setShenhavFile(null); setShenhavMapping({}); }}
-          file={shenhavFile}
+          label="קובץ Vevi (שנהב)"
+          description="רשימת עבודות מ-Vevi Dental"
+          onFileLoaded={setVeviFile}
+          onClear={() => setVeviFile(null)}
+          file={veviFile}
         />
         <FileUploader
           label="קובץ חשבשבת"
-          description="חשבוניות מחשבשבת"
+          description="כרטסת הנהלת חשבונות"
           onFileLoaded={setHashavshevetFile}
-          onClear={() => { setHashavshevetFile(null); setHashavshevetMapping({}); }}
+          onClear={() => setHashavshevetFile(null)}
           file={hashavshevetFile}
         />
       </div>
-
-      {/* Column Mapping */}
-      {(shenhavFile || hashavshevetFile) && (
-        <div className="space-y-3">
-          {shenhavFile && (
-            <ColumnMapper
-              headers={shenhavFile.headers}
-              fileType="shenhav"
-              onMappingChange={setShenhavMapping}
-            />
-          )}
-          {hashavshevetFile && (
-            <ColumnMapper
-              headers={hashavshevetFile.headers}
-              fileType="hashavshevet"
-              onMappingChange={setHashavshevetMapping}
-            />
-          )}
-        </div>
-      )}
 
       {/* Process Button */}
       <div className="text-center">
@@ -167,9 +129,6 @@ export default function MatcherPage() {
           <Search className="w-5 h-5" />
           בצע התאמה
         </button>
-        {!canProcess && shenhavFile && hashavshevetFile && (
-          <p className="text-sm text-red-500 mt-2">יש להשלים מיפוי עמודות חובה בשני הקבצים</p>
-        )}
       </div>
     </div>
   );

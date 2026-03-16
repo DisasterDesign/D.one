@@ -1,43 +1,40 @@
 import { NextResponse } from 'next/server';
-import { parseShenhavFile } from '@/lib/matcher/parse-shenhav';
+import { parseVeviFile } from '@/lib/matcher/parse-vevi';
 import { parseHashavshevetFile } from '@/lib/matcher/parse-hashavshevet';
 import { runMatching } from '@/lib/matcher/matching-engine';
-import type { ColumnMapping } from '@/lib/matcher/types';
 
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();
-    const shenhavBlob = formData.get('shenhavFile') as Blob | null;
+    const veviBlob = formData.get('veviFile') as Blob | null;
     const hashavshevetBlob = formData.get('hashavshevetFile') as Blob | null;
-    const mappingStr = formData.get('columnMapping') as string | null;
 
-    if (!shenhavBlob || !hashavshevetBlob || !mappingStr) {
-      return NextResponse.json({ error: 'חסרים קבצים או מיפוי עמודות' }, { status: 400 });
+    if (!veviBlob || !hashavshevetBlob) {
+      return NextResponse.json({ error: 'חסרים קבצים' }, { status: 400 });
     }
 
-    let columnMapping: ColumnMapping;
-    try {
-      columnMapping = JSON.parse(mappingStr);
-    } catch {
-      return NextResponse.json({ error: 'מיפוי עמודות לא תקין' }, { status: 400 });
-    }
-
-    const shenhavBuffer = await shenhavBlob.arrayBuffer();
+    const veviBuffer = await veviBlob.arrayBuffer();
     const hashavshevetBuffer = await hashavshevetBlob.arrayBuffer();
 
-    const { records: quotes, errors: quoteErrors } = parseShenhavFile(shenhavBuffer, columnMapping.shenhav);
-    const { records: invoices, errors: invoiceErrors } = parseHashavshevetFile(hashavshevetBuffer, columnMapping.hashavshevet);
+    const { records: veviJobs, errors: veviErrors } = parseVeviFile(veviBuffer);
+    const { invoiceRecords, errors: hashavErrors } =
+      parseHashavshevetFile(hashavshevetBuffer);
 
-    if (quotes.length === 0 && invoices.length === 0) {
-      return NextResponse.json({ error: 'שני הקבצים ריקים' }, { status: 400 });
+    if (veviJobs.length === 0) {
+      return NextResponse.json(
+        { error: 'קובץ Vevi ריק או לא ניתן לקרוא' },
+        { status: 400 }
+      );
     }
 
-    const allErrors = [...quoteErrors, ...invoiceErrors];
-    const report = runMatching(quotes, invoices, allErrors);
+    const report = runMatching(veviJobs, invoiceRecords);
 
-    return NextResponse.json(report);
+    // Attach parse errors for debugging
+    const parseErrors = [...veviErrors, ...hashavErrors];
+    return NextResponse.json({ ...report, parseErrors });
   } catch (err) {
     console.error('Matcher process error:', err);
-    return NextResponse.json({ error: 'שגיאה בעיבוד הקבצים' }, { status: 500 });
+    const message = err instanceof Error ? err.message : 'שגיאה בעיבוד הקבצים';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

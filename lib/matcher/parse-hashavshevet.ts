@@ -1,80 +1,130 @@
 import * as XLSX from 'xlsx';
-import type { InvoiceRecord } from './types';
-import { normalizeWorkNumber } from './parse-shenhav';
+import type { HashavshevetRecord } from './types';
+import { extractFromDetails } from './extract-details';
 
-function parseAmount(raw: unknown): number {
-  if (raw == null) return 0;
-  if (typeof raw === 'number') return raw;
-  const str = String(raw).replace(/[₪,\s]/g, '').trim();
-  const num = parseFloat(str);
-  return isNaN(num) ? 0 : num;
+function formatDate(val: unknown): string {
+  if (!val) return '';
+  if (val instanceof Date) return val.toISOString().slice(0, 10);
+  const s = String(val);
+  if (s.includes('T')) return s.slice(0, 10);
+  return s;
 }
 
-export function extractWorkNumber(details: string): string {
-  if (!details) return '';
-  const str = String(details).trim();
-
-  // Try labeled patterns first
-  const labeledMatch = str.match(/עבודה\s*(?:מס['.׳]?\s*)?(\d+)/);
-  if (labeledMatch) return normalizeWorkNumber(labeledMatch[1]);
-
-  const quoteMatch = str.match(/הצעה\s*(\d+)/);
-  if (quoteMatch) return normalizeWorkNumber(quoteMatch[1]);
-
-  // Fallback: find a 3-8 digit number
-  const numberMatch = str.match(/\d{3,8}/);
-  if (numberMatch) return normalizeWorkNumber(numberMatch[0]);
-
-  return normalizeWorkNumber(str);
-}
-
-export function parseHashavshevetFile(
-  buffer: ArrayBuffer,
-  columnMapping: { invoiceNumber: string; workNumber: string; clientName: string; amount: string; date?: string }
-): { records: InvoiceRecord[]; errors: string[] } {
-  const records: InvoiceRecord[] = [];
-  const errors: string[] = [];
-
+export function parseHashavshevetFile(buffer: ArrayBuffer): {
+  records: HashavshevetRecord[];
+  invoiceRecords: HashavshevetRecord[];
+  errors: string[];
+} {
   const workbook = XLSX.read(buffer, { type: 'array' });
   const sheet = workbook.Sheets[workbook.SheetNames[0]];
-  const rows = XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet, { defval: '' });
+  const raw = XLSX.utils.sheet_to_json<unknown[]>(sheet, {
+    header: 1,
+    defval: null,
+  });
 
-  for (let i = 0; i < rows.length; i++) {
-    const row = rows[i];
-    const rawWorkField = String(row[columnMapping.workNumber] ?? '');
-
-    // Try direct value first, then extract from text
-    let workNumber = normalizeWorkNumber(rawWorkField);
-    if (!workNumber || workNumber === '0') {
-      workNumber = extractWorkNumber(rawWorkField);
+  // --- STEP 1: Find the header row ---
+  let headerRowIndex = -1;
+  for (let i = 0; i < Math.min(raw.length, 10); i++) {
+    const row = raw[i] as unknown[];
+    if (!row) continue;
+    const rowText = row.filter(Boolean).map(String).join(' ');
+    if (rowText.includes('כותרת') && rowText.includes('פרטים')) {
+      headerRowIndex = i;
+      break;
     }
+  }
+  if (headerRowIndex === -1) {
+    throw new Error('לא נמצאה שורת כותרות בקובץ חשבשבת');
+  }
 
-    if (!workNumber) {
-      errors.push(`שורה ${i + 2}: לא ניתן לזהות מספר עבודה`);
-      records.push({
-        invoiceNumber: String(row[columnMapping.invoiceNumber] ?? ''),
-        workNumber: '',
-        clientName: String(row[columnMapping.clientName] ?? ''),
-        amount: parseAmount(row[columnMapping.amount]),
-        date: columnMapping.date ? String(row[columnMapping.date] ?? '') : '',
-        details: rawWorkField,
-        rawRow: row,
-        rowIndex: i + 2,
-      });
-      continue;
+  // --- STEP 2: Find column indices from header ---
+  const headerRow = raw[headerRowIndex] as unknown[];
+  const colMap: Record<string, number> = {};
+
+  headerRow.forEach((val, idx) => {
+    if (val == null) return;
+    const s = String(val).trim();
+    if (s === 'כותרת') colMap.header = idx;
+    if (s === 'ס"ת' || s === "ס\"ת") colMap.sot = idx;
+    if (s.includes('ח-ן נגדי')) colMap.counter = idx;
+    if (s.includes('ת.אסמכ')) colMap.date = idx;
+    if (s.includes('ת.ערך')) colMap.valueDate = idx;
+    if (s === "אסמ'" || s === "אסמ\'" || s === 'אסמ׳') colMap.ref = idx;
+    if (s === 'פרטים') colMap.details = idx;
+    // For debit/credit: look for חובה and זכות columns
+    if (s.includes('חובה') && !colMap.debit) colMap.debit = idx;
+    if (s.includes('זכות') && !colMap.credit) colMap.credit = idx;
+  });
+
+  // --- STEP 3: Find data start ---
+  let dataStartIndex = headerRowIndex + 1;
+  while (dataStartIndex < raw.length) {
+    const row = raw[dataStartIndex] as unknown[];
+    if (!row) { dataStartIndex++; continue; }
+    const headerVal = row[colMap.header];
+    if (headerVal != null && !isNaN(Number(headerVal)) && Number(headerVal) > 10000) {
+      break;
     }
+    dataStartIndex++;
+  }
+
+  // --- STEP 4: Parse data rows ---
+  const records: HashavshevetRecord[] = [];
+  const errors: string[] = [];
+
+  for (let i = dataStartIndex; i < raw.length; i++) {
+    const row = raw[i] as unknown[];
+    if (!row) continue;
+    const headerVal = row[colMap.header];
+
+    // Stop at summary rows
+    if (headerVal != null && String(headerVal).includes('סה"כ')) break;
+    if (headerVal != null && String(headerVal).includes('מספר תנועות')) break;
+
+    // Skip rows without a numeric header
+    if (headerVal == null || isNaN(Number(headerVal))) continue;
+
+    const details =
+      colMap.details != null && row[colMap.details] != null
+        ? String(row[colMap.details]).trim()
+        : '';
+    const sot =
+      colMap.sot != null && row[colMap.sot] != null
+        ? String(row[colMap.sot]).trim()
+        : '';
+    const debit =
+      colMap.debit != null && row[colMap.debit] != null
+        ? Number(row[colMap.debit])
+        : null;
+    const credit =
+      colMap.credit != null && row[colMap.credit] != null
+        ? Number(row[colMap.credit])
+        : null;
+
+    const { patientName, jobNumbers } = extractFromDetails(details);
 
     records.push({
-      invoiceNumber: String(row[columnMapping.invoiceNumber] ?? ''),
-      workNumber,
-      clientName: String(row[columnMapping.clientName] ?? ''),
-      amount: parseAmount(row[columnMapping.amount]),
-      date: columnMapping.date ? String(row[columnMapping.date] ?? '') : '',
-      details: rawWorkField,
-      rawRow: row,
-      rowIndex: i + 2,
+      headerNumber: Number(headerVal),
+      transactionType: sot,
+      counterAccount:
+        colMap.counter != null && row[colMap.counter] != null
+          ? String(row[colMap.counter])
+          : '',
+      date: colMap.date != null ? formatDate(row[colMap.date]) : '',
+      valueDate: colMap.valueDate != null ? formatDate(row[colMap.valueDate]) : '',
+      reference:
+        colMap.ref != null && row[colMap.ref] != null
+          ? String(row[colMap.ref])
+          : '',
+      details,
+      debitAmount: debit != null && !isNaN(debit) ? debit : null,
+      creditAmount: credit != null && !isNaN(credit) ? credit : null,
+      patientName,
+      jobNumbers,
+      isInvoice: sot === '1',
     });
   }
 
-  return { records, errors };
+  const invoiceRecords = records.filter((r) => r.isInvoice);
+  return { records, invoiceRecords, errors };
 }
