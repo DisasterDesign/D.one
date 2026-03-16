@@ -20,6 +20,8 @@ function getField(row: Record<string, unknown>, ...keys: string[]): string {
 
 export function parseVeviFile(buffer: ArrayBuffer): {
   records: VeviRecord[];
+  totalBeforeFilter: number;
+  filteredOut: number;
   errors: string[];
 } {
   const workbook = XLSX.read(buffer, { type: 'array' });
@@ -44,6 +46,7 @@ export function parseVeviFile(buffer: ArrayBuffer): {
       customer: getField(row, 'Customer', 'לקוח'),
       doctor: getField(row, 'Doctor', 'רופא'),
       patient: getField(row, 'Patient', 'מטופל'),
+      boxNumber: getField(row, 'Box number', 'מספר קופסה', 'BoxNumber'),
       acceptDate: formatDate(row['Accept date'] ?? row['תאריך קבלה']),
       deliveryDate: formatDate(row['Delivery date'] ?? row['תאריך משלוח']),
       finishDate: formatDate(row['Finish date'] ?? row['תאריך סיום']),
@@ -51,5 +54,14 @@ export function parseVeviFile(buffer: ArrayBuffer): {
     });
   }
 
-  return { records, errors };
+  // Filter: only jobs WITHOUT Box number (these need invoice verification)
+  // Jobs with a Box number are physically shipped and invoiced automatically
+  const filteredRecords = records.filter(r => !r.boxNumber);
+
+  return {
+    records: filteredRecords,
+    totalBeforeFilter: records.length,
+    filteredOut: records.length - filteredRecords.length,
+    errors,
+  };
 }

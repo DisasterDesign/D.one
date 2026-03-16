@@ -2,7 +2,8 @@ import type { VeviRecord, HashavshevetRecord, MatchResult, MatchReport } from '.
 
 export function runMatching(
   veviJobs: VeviRecord[],
-  hashavInvoices: HashavshevetRecord[]
+  hashavInvoices: HashavshevetRecord[],
+  filterInfo: { totalInFile: number; filteredOutBoxNumber: number } = { totalInFile: 0, filteredOutBoxNumber: 0 }
 ): MatchReport {
   const timestamp = new Date().toISOString();
 
@@ -86,6 +87,8 @@ export function runMatching(
 
   return {
     timestamp,
+    totalInFile: filterInfo.totalInFile || total,
+    filteredOutBoxNumber: filterInfo.filteredOutBoxNumber,
     total,
     matchedByNumber,
     matchedByName,

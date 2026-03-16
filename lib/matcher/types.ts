@@ -4,6 +4,7 @@ export interface VeviRecord {
   customer: string;
   doctor: string;
   patient: string;
+  boxNumber: string;
   acceptDate: string;
   deliveryDate: string;
   finishDate: string;
@@ -41,6 +42,8 @@ export interface MatchResult {
 
 export interface MatchReport {
   timestamp: string;
+  totalInFile: number;
+  filteredOutBoxNumber: number;
   total: number;
   matchedByNumber: number;
   matchedByName: number;

@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     const veviBuffer = await veviBlob.arrayBuffer();
     const hashavshevetBuffer = await hashavshevetBlob.arrayBuffer();
 
-    const { records: veviJobs, errors: veviErrors } = parseVeviFile(veviBuffer);
+    const { records: veviJobs, totalBeforeFilter, filteredOut, errors: veviErrors } = parseVeviFile(veviBuffer);
     const { invoiceRecords, errors: hashavErrors } =
       parseHashavshevetFile(hashavshevetBuffer);
 
@@ -27,7 +27,10 @@ export async function POST(req: Request) {
       );
     }
 
-    const report = runMatching(veviJobs, invoiceRecords);
+    const report = runMatching(veviJobs, invoiceRecords, {
+      totalInFile: totalBeforeFilter,
+      filteredOutBoxNumber: filteredOut,
+    });
 
     // Attach parse errors for debugging
     const parseErrors = [...veviErrors, ...hashavErrors];

@@ -13,7 +13,22 @@ export async function POST(req: Request) {
       [`תאריך הפקה: ${new Date().toLocaleDateString('he-IL')}`],
       [],
       ['', 'כמות', 'אחוז'],
-      ['סה"כ עבודות ב-Vevi', report.total, '100%'],
+      ...(report.filteredOutBoxNumber > 0
+        ? [
+            ['סה"כ עבודות בקובץ', report.totalInFile, '100%'],
+            [
+              'סוננו (יש Box number)',
+              report.filteredOutBoxNumber,
+              report.totalInFile > 0
+                ? ((report.filteredOutBoxNumber / report.totalInFile) * 100).toFixed(1) + '%'
+                : '0%',
+            ],
+            ['─────────────────', '────', '────'],
+          ]
+        : []),
+      ['עבודות לבדיקה', report.total, report.filteredOutBoxNumber > 0
+        ? ((report.total / report.totalInFile) * 100).toFixed(1) + '%'
+        : '100%'],
       [
         'יצאה חשבונית (התאמה לפי מספר עבודה)',
         report.matchedByNumber,
