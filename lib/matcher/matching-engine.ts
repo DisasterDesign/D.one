@@ -48,6 +48,7 @@ export function runMatching(
       matchType: 'NONE',
       matchedInvoiceDetails: '',
       matchedInvoiceAmount: null,
+      invoiceNumber: '',
     };
 
     // Try match by job number first (highest confidence)
@@ -57,6 +58,7 @@ export function runMatching(
       if (inv) {
         result.matchedInvoiceDetails = inv.details;
         result.matchedInvoiceAmount = inv.debitAmount;
+        result.invoiceNumber = inv.reference;
       }
       matchedByNumber++;
     }
@@ -67,6 +69,7 @@ export function runMatching(
       if (inv) {
         result.matchedInvoiceDetails = inv.details;
         result.matchedInvoiceAmount = inv.debitAmount;
+        result.invoiceNumber = inv.reference;
       }
       matchedByName++;
     }

@@ -60,11 +60,12 @@ export async function POST(req: Request) {
     // === Sheet 2: עבודות עם חשבונית ===
     const matchedResults = report.results.filter((r) => r.matchType !== 'NONE');
     const matchedData = [
-      ['מס׳ עבודה', 'שם מטופל', 'סוג עבודה', 'התאמה לפי', 'פרטים בחשבשבת'],
+      ['מס׳ עבודה', 'שם מטופל', 'סוג עבודה', 'מספר חשבונית', 'התאמה לפי', 'פרטים בחשבשבת'],
       ...matchedResults.map((r) => [
         r.jobCode,
         r.patient,
         r.jobTags,
+        r.invoiceNumber || '',
         r.matchType === 'JOB_NUMBER' ? 'מספר עבודה' : 'שם מטופל',
         r.matchedInvoiceDetails,
       ]),
@@ -74,6 +75,7 @@ export async function POST(req: Request) {
       { wch: 14 },
       { wch: 22 },
       { wch: 35 },
+      { wch: 14 },
       { wch: 16 },
       { wch: 45 },
     ];

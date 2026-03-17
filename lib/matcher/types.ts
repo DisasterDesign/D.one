@@ -38,6 +38,7 @@ export interface MatchResult {
   matchType: MatchType;
   matchedInvoiceDetails: string;
   matchedInvoiceAmount: number | null;
+  invoiceNumber: string;
 }
 
 export interface MatchReport {

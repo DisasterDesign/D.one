@@ -72,7 +72,8 @@ export default function MatchTable({ results }: Props) {
           String(r.jobCode).includes(s) ||
           r.patient.toLowerCase().includes(s) ||
           r.jobTags.toLowerCase().includes(s) ||
-          r.matchedInvoiceDetails.toLowerCase().includes(s)
+          r.matchedInvoiceDetails.toLowerCase().includes(s) ||
+          (r.invoiceNumber && r.invoiceNumber.toLowerCase().includes(s))
         );
       });
     }
@@ -186,6 +187,7 @@ export default function MatchTable({ results }: Props) {
               )}
               {activeTab === 'matched' && (
                 <>
+                  <th className="px-3 py-2 text-right">מספר חשבונית</th>
                   <th className="px-3 py-2 text-right">התאמה לפי</th>
                   <th className="px-3 py-2 text-right">פרטים בחשבשבת</th>
                 </>
@@ -230,6 +232,7 @@ export default function MatchTable({ results }: Props) {
                   )}
                   {activeTab === 'matched' && (
                     <>
+                      <td className="px-3 py-2 font-mono">{r.invoiceNumber || '—'}</td>
                       <td className="px-3 py-2">
                         <span
                           className={`px-2 py-0.5 rounded-full text-xs font-medium ${
